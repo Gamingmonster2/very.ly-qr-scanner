@@ -1,0 +1,1 @@
+# very.ly-qr-scanner
