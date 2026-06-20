@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO & Meta Tags -->
+    <title>قارئ كود الـ QR الذكي من الصور - qr.very.ly</title>
+    <meta name="description" content="أداة احترافية سريعة لاستخراج وتشفير رموز كروت الشحن والتعبئة من الصور ولقطات شاشة الواتساب مباشرة محلياً وآمناً وبدون كاميرا.">
+    <meta name="keywords" content="قارئ QR, استخراج كود الشحن, كروت ليبيانا, كروت المدار, قراءة QR من صورة, qr.very.ly">
+    <meta name="author" content="qr.very.ly">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://qr.very.ly/">
+    <meta property="og:title" content="قارئ كود الـ QR الذكي من الصور - qr.very.ly">
+    <meta property="og:description" content="استخرج كود الشحن من لقطات الشاشة وصور كروت ليبيانا والمدار فوراً ومحلياً 100% دون رفع صورك إلى أي خادم.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://qr.very.ly/">
+    <meta property="twitter:title" content="قارئ كود الـ QR الذكي من الصور - qr.very.ly">
+    <meta property="twitter:description" content="استخرج كود الشحن من لقطات الشاشة وصور كروت ليبيانا والمدار فوراً ومحلياً 100% دون رفع صورك إلى أي خادم.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+        body {
+            font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif;
+        }
+        .pearl-glow {
+            background: radial-gradient(circle at 50% 50%, rgba(240, 253, 244, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
+        }
+        .dark .pearl-glow {
+            background: radial-gradient(circle at 50% 50%, rgba(20, 40, 30, 0.4) 0%, rgba(15, 17, 16, 0) 70%);
+        }
+        .hologram-border {
+            position: relative;
+        }
+        .hologram-border::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, #a7f3d0, #34d399, #059669, #10b981);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+        }
+        .hologram-border:hover::after {
+            opacity: 1;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-[#F8FAF9] text-slate-800 dark:bg-[#0B0F0C] dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col selection:bg-emerald-500/20">
+
+    <!-- Background Decorative Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-1/4 left-1/10 w-96 h-96 pearl-glow rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 right-1/10 w-80 h-80 pearl-glow rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-white/70 dark:bg-[#0B0F0C]/70 border-b border-emerald-100/30 dark:border-emerald-950/30 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="/" class="flex items-center space-x-2 space-x-reverse group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h.01M16 20h2a2 2 0 002-2v-2M16 4h2a2 2 0 012 2v2M8 20H6a2 2 0 01-2-2v-2M8 4H6a2 2 0 00-2 2v2"></path>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">qr.<span class="text-emerald-500">very</span>.ly</span>
+                    <span class="text-[10px] text-slate-400 dark:text-emerald-500/60 font-medium tracking-widest uppercase">Smart Scanner</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-8 space-x-reverse">
+                <button onclick="openModal('modal-about')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer">طريقة الاستخدام</button>
+                <button onclick="openModal('modal-privacy')" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer">الخصوصية والأمان</button>
+            </nav>
+
+            <!-- Theme Switcher & Actions -->
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" aria-label="تبديل المظهر" class="p-2.5 rounded-xl bg-slate-100 dark:bg-emerald-950/40 text-slate-700 dark:text-emerald-300 border border-slate-200/50 dark:border-emerald-900/40 hover:scale-105 active:scale-95 transition-all cursor-pointer">
+                    <!-- Sun Icon (shown in dark mode) -->
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 2.293a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zm4 4.707a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM14 14a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM4.293 14a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm2.293-5.707a1 1 0 010 1.414l-.707.707A1 1 0 012.172 5.01l.707-.707a1 1 0 011.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z"></path>
+                    </svg>
+                    <!-- Moon Icon (shown in light mode) -->
+                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                    </svg>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="openModal('modal-about')" class="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:text-emerald-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main id="main-content" class="flex-grow z-10">
+        
+        <!-- Hero Section -->
+        <section class="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 text-center max-w-4xl mx-auto">
+            <!-- Decorative Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold mb-6 floating-element">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                قراءة محلية آمنة 100% بدون كاميرا وبدون خوادم
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight mb-6">
+                قارئ كود الـ QR الذكي <br class="hidden sm:inline">
+                <span class="bg-gradient-to-r from-emerald-600 to-teal-400 bg-clip-text text-transparent">من لقطات الشاشة والصور</span>
+            </h1>
+            
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                مخصص لفك شفرات واستخراج أكواد كروت شحن الهواتف (مثل ليبيانا، المدار، وغيرها) مباشرة من لقطات شاشة الواتساب أو الصور المخزنة في جهازك بسرعة فائقة.
+            </p>
+        </section>
+
+        <!-- Main Interactive Core Area -->
+        <section class="max-w-3xl mx-auto px-4 sm:px-6 pb-24">
+            <div class="bg-white/80 dark:bg-[#111613]/90 backdrop-blur-xl rounded-3xl p-6 sm:p-10 border border-slate-200/50 dark:border-emerald-950/40 shadow-2xl shadow-emerald-950/5 relative overflow-hidden">
+                
+                <!-- Corner Decorative Glow -->
+                <div class="absolute -top-12 -left-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-teal-500/10 rounded-full blur-2xl"></div>
+
+                <!-- Step 1: Drag & Drop / Upload Box -->
+                <div id="drop-zone" class="border-2 border-dashed border-slate-300 dark:border-emerald-800/60 rounded-2xl p-8 sm:p-12 text-center hover:border-emerald-500 dark:hover:border-emerald-400 transition-all duration-300 cursor-pointer bg-slate-50/50 dark:bg-[#131915]/50 group relative">
+                    <input type="file" id="file-input" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" aria-label="تحميل صورة كود الـ QR">
+                    
+                    <div class="flex flex-col items-center justify-center space-y-4 pointer-events-none">
+                        <!-- Upload Icon with Hologram/Pearl Glow Effect -->
+                        <div class="w-16 h-16 rounded-2xl bg-white dark:bg-emerald-950/60 flex items-center justify-center shadow-md border border-slate-100 dark:border-emerald-900/40 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        
+                        <div class="space-y-1.5">
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">اسحب وأسقط لقطة الشاشة هنا</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">أو اضغط لتصفح ملفات جهازك</p>
+                        </div>
+
+                        <div class="pt-4 flex flex-wrap gap-2 justify-center text-xs text-slate-400 dark:text-emerald-500/50">
+                            <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-emerald-950/30">يدعم لقطات شاشة واتساب</span>
+                            <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-emerald-950/30">كروت ليبيانا والمدار</span>
+                            <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-emerald-950/30">اختصار لصق (Ctrl + V)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Preview Section (Hidden by default) -->
+                <div id="preview-container" class="hidden mt-6 p-4 rounded-xl bg-slate-100/50 dark:bg-emerald-950/20 border border-slate-200/40 dark:border-emerald-900/20 flex flex-col items-center">
+                    <p class="text-xs text-slate-400 mb-2">الصورة المحددة:</p>
+                    <img id="image-preview" src="#" alt="معاينة الصورة" class="max-h-48 rounded-lg object-contain shadow-sm">
+                </div>
+
+                <!-- Processing / Loading Indicator -->
+                <div id="loading-state" class="hidden mt-8 text-center space-y-3">
+                    <div class="inline-block w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">جاري مسح ومعالجة الصورة محلياً...</p>
+                </div>
+
+                <!-- Error Message Banner -->
+                <div id="error-banner" class="hidden mt-8 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-300 text-sm flex items-start space-x-3 space-x-reverse">
+                    <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <div>
+                        <span class="font-bold">فشل التعرف على الكود:</span>
+                        <p class="mt-1 text-xs opacity-90 leading-relaxed" id="error-text">تأكد من أن الصورة تحتوي على رمز QR واضح وغير مقطوع أو مائل بشكل حاد.</p>
+                    </div>
+                </div>
+
+                <!-- Output Display Section -->
+                <div id="output-section" class="hidden mt-8 space-y-6 animate-fade-in">
+                    <div class="h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent"></div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label for="output-text" class="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                النص المستخرج (كود الشحن):
+                            </label>
+                            <span class="text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full font-medium">تمت القراءة بنجاح</span>
+                        </div>
+                        
+                        <!-- Main Result Box -->
+                        <div class="relative rounded-2xl overflow-hidden bg-slate-50 dark:bg-emerald-950/20 border border-slate-200/60 dark:border-emerald-900/40 p-1">
+                            <textarea id="output-text" readonly rows="3" class="w-full bg-transparent border-0 focus:ring-0 text-slate-800 dark:text-slate-200 font-mono text-lg p-4 resize-none text-center tracking-wider" placeholder="سيظهر الكود هنا..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Copy Button -->
+                        <button id="btn-copy" class="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-bold text-sm shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                            </svg>
+                            نسخ الكود إلى الحافظة
+                        </button>
+
+                        <!-- Share Button -->
+                        <button id="btn-share" class="w-full py-4 px-6 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-emerald-950/40 dark:hover:bg-emerald-950/80 text-slate-800 dark:text-emerald-300 font-bold text-sm border border-slate-200/50 dark:border-emerald-900/40 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 10.742l4.61-2.305m0 0a3 3 0 10-2.243-4.077L7.33 6.75a3 3 0 100 4.5l6.32 3.16a3 3 0 11-1.533 2.28L6.75 13.5a3 3 0 10-2.243 4.077L14.75 12a3 3 0 00-1.533-2.28z"></path>
+                            </svg>
+                            مشاركة الكود
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Alternating Feature Rows & App Info -->
+        <section class="border-t border-slate-200/50 dark:border-emerald-950/40 bg-white dark:bg-[#0D110E] py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+                
+                <!-- Row A: Local processing benefits -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">أمان تام بدون رفع صورك السريّة</h2>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                            على عكس المواقع الأخرى التي تتطلب رفع صور الكروت ولقطات الشاشة إلى خوادم خارجية، تتم معالجة صورك بالكامل داخل متصفحك محلياً عبر تقنية Canvas و jsQR. لا يتم إرسال أي بايت واحد خارج جهازك.
+                        </p>
+                    </div>
+                    <div class="relative flex justify-center">
+                        <!-- Simulated Isometric Graphic -->
+                        <div class="relative w-80 h-80 bg-gradient-to-br from-emerald-100 to-teal-50 dark:from-emerald-950/30 dark:to-emerald-900/10 rounded-3xl border border-slate-200/40 dark:border-emerald-850/30 flex items-center justify-center shadow-inner">
+                            <div class="absolute w-64 h-64 rounded-full bg-emerald-500/5 animate-pulse"></div>
+                            <svg class="w-32 h-32 text-emerald-600/20 dark:text-emerald-400/10 absolute" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            <div class="w-48 h-48 bg-white/60 dark:bg-emerald-900/20 backdrop-blur-md rounded-2xl border border-white/80 dark:border-emerald-800/20 p-6 flex flex-col justify-between shadow-lg transform -rotate-6">
+                                <div class="flex justify-between items-center">
+                                    <div class="h-2 w-12 bg-emerald-400 rounded"></div>
+                                    <div class="h-2 w-6 bg-slate-300 rounded"></div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="h-1.5 w-full bg-slate-200 dark:bg-emerald-950/40 rounded"></div>
+                                    <div class="h-1.5 w-5/6 bg-slate-200 dark:bg-emerald-950/40 rounded"></div>
+                                </div>
+                                <div class="h-8 w-full bg-emerald-500/20 dark:bg-emerald-500/40 rounded-lg flex items-center justify-center text-[10px] font-bold text-emerald-700 dark:text-emerald-200">
+                                    معالجة محلية 100%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row B: Optimized for WhatsApp Screenshots -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="relative flex justify-center md:order-last">
+                        <div class="relative w-80 h-80 bg-gradient-to-br from-teal-100 to-emerald-50 dark:from-teal-950/30 dark:to-emerald-900/10 rounded-3xl border border-slate-200/40 dark:border-emerald-850/30 flex items-center justify-center shadow-inner">
+                            <div class="absolute w-64 h-64 rounded-full bg-teal-500/5 animate-pulse"></div>
+                            <svg class="w-32 h-32 text-teal-600/20 dark:text-teal-400/10 absolute" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            <div class="w-48 h-48 bg-white/60 dark:bg-emerald-900/20 backdrop-blur-md rounded-2xl border border-white/80 dark:border-emerald-800/20 p-6 flex flex-col justify-between shadow-lg transform rotate-6">
+                                <div class="flex justify-between items-center">
+                                    <div class="h-2.5 w-2.5 rounded-full bg-emerald-500"></div>
+                                    <div class="h-2 w-16 bg-slate-300 rounded"></div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="h-1.5 w-full bg-slate-200 dark:bg-emerald-950/40 rounded"></div>
+                                    <div class="h-1.5 w-4/5 bg-slate-200 dark:bg-emerald-950/40 rounded"></div>
+                                </div>
+                                <div class="h-8 w-full bg-emerald-600 rounded-lg flex items-center justify-center text-[10px] font-bold text-white">
+                                    استخراج فوري
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6 md:order-first">
+                        <div class="w-12 h-12 rounded-2xl bg-teal-500/10 dark:bg-teal-500/20 flex items-center justify-center text-teal-600 dark:text-teal-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">توفير الوقت والجهد</h2>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                            هل أرسل لك أحدهم كود شحن عبر لقطة شاشة واتساب؟ لا داعي لكتابة الأرقام الطويلة يدوياً أو البحث عن هاتف آخر لمسح الرمز. فقط قم برفع لقطة الشاشة هنا وسيقوم النظام باستخراج الكود فوراً وبدقة متناهية.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Premium Asset Matrix / Features Grid -->
+        <section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-center text-slate-900 dark:text-white mb-16">لماذا تختار منصة qr.very.ly؟</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Feature Card 1 -->
+                <div class="bg-white dark:bg-[#111613] p-8 rounded-2xl border border-slate-200/50 dark:border-emerald-950/40 shadow-sm hover:shadow-md transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">سرعة فائقة</h3>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">تتم المعالجة في أجزاء من الثانية بفضل خوارزميات فك تشفير الـ QR المكتوبة بلغة الـ JS والمنفذة مباشرة بجهازك.</p>
+                </div>
+
+                <!-- Feature Card 2 -->
+                <div class="bg-white dark:bg-[#111613] p-8 rounded-2xl border border-slate-200/50 dark:border-emerald-950/40 shadow-sm hover:shadow-md transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">خصوصية مطلقة</h3>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">ملفاتك وصورك لا تغادر متصفحك أبداً. نقدر خصوصية بياناتك المالية وكروت الشحن الخاصة بك.</p>
+                </div>
+
+                <!-- Feature Card 3 -->
+                <div class="bg-white dark:bg-[#111613] p-8 rounded-2xl border border-slate-200/50 dark:border-emerald-950/40 shadow-sm hover:shadow-md transition-all sm:col-span-2 lg:col-span-1">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">سهولة النسخ والمشاركة</h3>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">بضغطة زر واحدة يمكنك نسخ الكود أو مشاركته فوراً عبر تطبيق واتساب أو أي تطبيق تواصل آخر.</p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Deep Corporate Footer -->
+    <footer class="bg-[#0B0D0C] text-slate-400 border-t border-emerald-950/40 py-12 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center border-b border-emerald-950/60 pb-8 mb-8">
+                <!-- Branding -->
+                <div class="text-center md:text-right">
+                    <span class="text-xl font-extrabold tracking-tight text-white">qr.<span class="text-emerald-500">very</span>.ly</span>
+                    <p class="text-xs text-slate-500 mt-2">الحل الأمثل لفك رموز كروت الشحن محلياً وبثوانٍ معدودة.</p>
+                </div>
+                
+                <!-- Links -->
+                <div class="flex justify-center space-x-6 space-x-reverse text-sm">
+                    <button onclick="openModal('modal-about')" class="hover:text-emerald-400 transition-colors cursor-pointer">كيفية الاستخدام</button>
+                    <button onclick="openModal('modal-privacy')" class="hover:text-emerald-400 transition-colors cursor-pointer">سياسة الخصوصية</button>
+                </div>
+
+                <!-- Domain Info -->
+                <div class="text-center md:text-left text-xs text-slate-500">
+                    مستضاف بأمان على GitHub Pages
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                <p>جميع الحقوق محفوظة © 2026 qr.very.ly</p>
+                <p class="flex items-center gap-1">
+                    صنع بكل حب لتسهيل معاملاتكم اليومية
+                    <span class="text-rose-500">♥</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal 1: About & Usage (عن الموقع وطريقة الاستخدام) -->
+    <div id="modal-about" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <!-- Backdrop Blur Overlay -->
+        <div onclick="closeModal('modal-about')" class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content Container -->
+        <div class="bg-white dark:bg-[#111613] rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-emerald-950/60 shadow-2xl z-10 transform scale-95 transition-all relative">
+            <button onclick="closeModal('modal-about')" class="absolute top-4 left-4 p-1.5 rounded-xl bg-slate-100 dark:bg-emerald-950/40 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    عن الموقع وطريقة الاستخدام
+                </h3>
+                
+                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                    مرحباً بك في منصة <strong>qr.very.ly</strong>. تم تصميم هذه المنصة لمساعدتك في استخراج وتفكيك رموز QR الموجودة على كروت التعبئة والشحن الخاصة بشركات الاتصالات (مثل ليبيانا والمدار) بسهولة تامة وبدون تعقيد.
+                </p>
+
+                <div class="bg-slate-50 dark:bg-emerald-950/20 p-4 rounded-2xl space-y-3 border border-slate-100 dark:border-emerald-900/20">
+                    <h4 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">خطوات الاستخدام البسيطة:</h4>
+                    <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-2 list-decimal list-inside">
+                        <li>التقط لقطة شاشة (Screenshot) لكود الـ QR المرسل إليك عبر الواتساب أو قم بتصوير الكرت.</li>
+                        <li>قم بسحب الصورة وإفلاتها في صندوق الرفع بالأعلى، أو اضغط لتحديدها من معرض الصور بجهازك.</li>
+                        <li>إذا كنت تستخدم الكمبيوتر، يمكنك نسخ الصورة ثم الضغط على <kbd class="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-800 rounded text-[10px] font-mono">Ctrl + V</kbd> للصقها مباشرة.</li>
+                        <li>سيظهر لك الكود فوراً في صندوق النتائج، جاهزاً للنسخ والمشاركة.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button onclick="closeModal('modal-about')" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm cursor-pointer">
+                    فهمت ذلك، إغلاق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Privacy Policy & Security (الخصوصية والأمان الصارم) -->
+    <div id="modal-privacy" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <!-- Backdrop Blur Overlay -->
+        <div onclick="closeModal('modal-privacy')" class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content Container -->
+        <div class="bg-white dark:bg-[#111613] rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-slate-200 dark:border-emerald-950/60 shadow-2xl z-10 transform scale-95 transition-all relative">
+            <button onclick="closeModal('modal-privacy')" class="absolute top-4 left-4 p-1.5 rounded-xl bg-slate-100 dark:bg-emerald-950/40 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    الخصوصية والأمان الصارم
+                </h3>
+                
+                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                    نحن نأخذ أمان بياناتك على محمل الجد البالغ. كروت الشحن الخاصة بك هي بمثابة أموال نقدية، ولذلك قمنا ببناء هذه الأداة لتعمل بآلية <strong>أوفلاين بالكامل (Local Execution)</strong>.
+                </p>
+
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3">
+                        <div class="p-1 rounded bg-emerald-500/10 text-emerald-600 shrink-0 mt-0.5">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.9C2.044 5.002 2 5.154 2 5.314V14.5a1.5 1.5 0 001.5 1.5h13a1.5 1.5 0 001.5-1.5V5.314c0-.16-.044-.312-.166-.412C16.36 3.63 14.19 3 10 3c-4.19 0-6.36.63-7.834 1.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            <strong>لا رفع للملفات:</strong> لا يتم إرسال صورك إلى أي خادم (Server) خارجي على الإطلاق. معالجة البكسلات وفك تشفير الـ QR تتم عبر متصفحك مباشرة وفي جهازك الشخصي.
+                        </p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="p-1 rounded bg-emerald-500/10 text-emerald-600 shrink-0 mt-0.5">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            <strong>لا تخزين للبيانات:</strong> بمجرد إغلاقك للصفحة، تختفي جميع الآثار والصور المرفوعة تلقائياً ولا يتم حفظ أي كود مستخرج في أي قاعدة بيانات.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button onclick="closeModal('modal-privacy')" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm cursor-pointer">
+                    أنا واثق ومطمئن، إغلاق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Execution Logic -->
+    <script>
+        // Theme Management
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+        // Check local storage or system preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+
+        // Modal Management
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // QR Code Extraction Logic
+        const fileInput = document.getElementById('file-input');
+        const dropZone = document.getElementById('drop-zone');
+        const previewContainer = document.getElementById('preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const loadingState = document.getElementById('loading-state');
+        const errorBanner = document.getElementById('error-banner');
+        const errorText = document.getElementById('error-text');
+        const outputSection = document.getElementById('output-section');
+        const outputText = document.getElementById('output-text');
+        const btnCopy = document.getElementById('btn-copy');
+        const btnShare = document.getElementById('btn-share');
+
+        // File Selection Listener
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                processImage(file);
+            }
+        });
+
+        // Drag & Drop Listeners
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-emerald-500', 'bg-emerald-500/5');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-emerald-500', 'bg-emerald-500/5');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const file = dt.files[0];
+            if (file && file.type.startsWith('image/')) {
+                processImage(file);
+            }
+        });
+
+        // Paste Support (Ctrl+V)
+        window.addEventListener('paste', (e) => {
+            const items = e.clipboardData.items;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    const file = items[i].getAsFile();
+                    processImage(file);
+                    break;
+                }
+            }
+        });
+
+        // Core Image Processing and QR Decoding
+        function processImage(file) {
+            // Reset state
+            errorBanner.classList.add('hidden');
+            outputSection.classList.add('hidden');
+            previewContainer.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+
+            // Show Preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                previewContainer.classList.remove('hidden');
+
+                const img = new Image();
+                img.onload = function() {
+                    // Create offline canvas
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Keep canvas dimensions safe
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0, img.width, img.height);
+                    
+                    try {
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const decoded = jsQR(imageData.data, imageData.width, imageData.height, {
+                            inversionAttempts: "dontInvert",
+                        });
+
+                        loadingState.classList.add('hidden');
+
+                        if (decoded) {
+                            showResult(decoded.data);
+                        } else {
+                            showError("لم نتمكن من العثور على رمز QR صالح في هذه الصورة. يرجى التأكد من أن الكود واضح ومضاء بشكل جيد وغير مقصوص.");
+                        }
+                    } catch (err) {
+                        loadingState.classList.add('hidden');
+                        showError("حدث خطأ أثناء معالجة الصورة. يرجى محاولة استخدام صورة أخرى بتنسيق قياسي.");
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Show Result
+        function showResult(text) {
+            outputText.value = text;
+            outputSection.classList.remove('hidden');
+            outputSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Show Error
+        function showError(msg) {
+            errorText.innerText = msg;
+            errorBanner.classList.remove('hidden');
+            errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Copy Clipboard Action
+        btnCopy.addEventListener('click', function() {
+            if (!outputText.value) return;
+            
+            navigator.clipboard.writeText(outputText.value).then(() => {
+                const originalText = btnCopy.innerHTML;
+                btnCopy.innerHTML = `
+                    <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    تم النسخ بنجاح!
+                `;
+                btnCopy.classList.replace('bg-emerald-600', 'bg-teal-600');
+                
+                setTimeout(() => {
+                    btnCopy.innerHTML = originalText;
+                    btnCopy.classList.replace('bg-teal-600', 'bg-emerald-600');
+                }, 2000);
+            }).catch(() => {
+                alert("تعذر نسخ النص تلقائياً، يرجى تحديده ونسخه يدوياً.");
+            });
+        });
+
+        // Share Action (Web Share API with fallback)
+        btnShare.addEventListener('click', function() {
+            const textToShare = outputText.value;
+            if (!textToShare) return;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'كود QR مستخرج من qr.very.ly',
+                    text: textToShare,
+                }).catch((err) => {
+                    console.log("Share cancelled or failed: ", err);
+                });
+            } else {
+                // Fallback: Copy and notify
+                navigator.clipboard.writeText(textToShare).then(() => {
+                    alert("تم نسخ الكود للحافظة نظراً لأن ميزة المشاركة غير مدعومة في متصفحك الحالي.");
+                });
+            }
+        });
+    </script>
+</body>
+</html>
